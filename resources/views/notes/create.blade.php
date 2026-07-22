@@ -11,6 +11,10 @@
         name="title"
         placeholder="Enter note title">
 
+    @error('title')
+    <p>{{ $message }}</p>
+    @enderror
+
     <button type="submit">
         Save Note
     </button>
