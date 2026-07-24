@@ -40,7 +40,7 @@ class NoteController extends Controller
         'description' => 'required',
      ]);
 
-    $note = Note::find($id);
+    $note = Note::findorfail($id);
 
     $note->update([
         'title' => $request->title,
@@ -48,5 +48,12 @@ class NoteController extends Controller
     ]);
 
     return redirect()->route('notes.index');
-}
+    }
+    public function destroy($id)
+    {
+        $note = Note::findorfail($id);
+        $note->delete();
+        return redirect()->route('notes.index');  
+     
+    }
 }
