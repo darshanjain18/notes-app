@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Note;
 
 class NoteController extends Controller
 {
@@ -14,7 +15,38 @@ class NoteController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'description' => 'required',
         ]);
-    dd($request->input('title'));
+        Note::create([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+        return redirect()->route('notes.index');
     }
+    public function index()
+    {
+        $notes = Note::all();
+        return view('notes.index',['notes' => $notes]);
+    }
+    public function edit($id)
+    {
+        $note = Note::find($id);
+        return view('notes.edit',['note' => $note]);
+    }
+    public function update(Request $request, $id)
+    {
+     $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+     ]);
+
+    $note = Note::find($id);
+
+    $note->update([
+        'title' => $request->title,
+        'description' => $request->description,
+    ]);
+
+    return redirect()->route('notes.index');
+}
 }

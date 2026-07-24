@@ -1,20 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
- <h1>Create a New Note</h1>
- <form action="{{ route('notes.store') }}" method="POST">
+ <h1>Edit Note</h1>
+ <form action="{{ route('notes.update', $note->id) }}" method="POST">
 
     @csrf
+    @method('PUT')
 
     <input
         type="text"
         name="title"
+        value="{{ $note->title }}"
         placeholder="Enter note title">
         <br>
         <br>
         <textarea
         name="description"
-        placeholder="Enter note description" ></textarea>
+        placeholder="Enter note description" >{{ $note->description }}</textarea>
 
     @error('title')
     <p>{{ $message }}</p>
@@ -25,7 +27,7 @@
     @enderror
 
     <button type="submit">
-        Save Note
+        Update Note
     </button>
 
 </form>

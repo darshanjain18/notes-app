@@ -23,6 +23,26 @@
             About
         @endif
     </a>
+    
+    |
+    
+    <a href="{{ route('notes.create') }}">
+        @if(request()->routeIs('notes.create'))
+            ⭐ Create Note
+        @else
+            Create Note
+        @endif
+    </a>
+
+    |
+
+    <a href="{{ route('notes.index') }}">
+        @if(request()->routeIs('notes.index'))
+            ⭐ All Notes
+        @else
+            All Notes
+        @endif
+    </a>
 </nav>
 
 <hr>
