@@ -28,9 +28,8 @@ class NoteController extends Controller
         $notes = Note::all();
         return view('notes.index',['notes' => $notes]);
     }
-    public function edit($id)
+    public function edit(Note $note)
     {
-        $note = Note::find($id);
         return view('notes.edit',['note' => $note]);
     }
     public function update(Request $request, $id)
