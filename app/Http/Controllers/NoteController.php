@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Note;
 
+
 class NoteController extends Controller
 {
     //
     public function index()
     {
-        $notes = Note::withTrashed()->get();
+        $notes = Note::withTrashed()->latest()->get();
         return view('notes.index',['notes' => $notes]);
     }
 
@@ -61,6 +62,21 @@ class NoteController extends Controller
         $note->delete();
         return redirect()->route('notes.index');  
      
+    }
+
+    public function restore($id)
+    {
+        $note = Note::withTrashed()->findOrFail($id);
+        $note->restore();
+        return redirect()->route('notes.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $note = Note::withTrashed()->findOrFail($id);
+        $note->forceDelete();
+        return redirect()->route('notes.index');
+
     }
 
      

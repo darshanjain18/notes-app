@@ -25,9 +25,27 @@
     <button type="submit">
         Delete
     </button>
+    </form>
+    
+
+    <form action="{{ route('notes.restore', $note->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <button type="submit">
+            Restore
+        </button>
+    </form>
+
+    <form action="{{ route('notes.forceDelete', $note->id) }}" method="POST">
+        @csrf
+        @method('DELETE')
+
+    <button type="submit">
+        💥 Delete Forever
+    </button>
+    </form>
  
     <hr>
-</form>
 
 @endforeach
 
