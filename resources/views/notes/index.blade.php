@@ -7,6 +7,10 @@
 
     <h3>{{ $note->title }}</h3>
 
+    @if($note->deleted_at)
+    <p>🗑️ Deleted</p>
+    @endif
+
     <p>{{ $note->description }}</p>
     <a href="{{ route('notes.show', $note) }}">View</a>
     <a href="{{ route('notes.edit', $note->id) }}">Edit</a>

@@ -9,7 +9,7 @@ class NoteController extends Controller
     //
     public function index()
     {
-        $notes = Note::all();
+        $notes = Note::withTrashed()->get();
         return view('notes.index',['notes' => $notes]);
     }
 
