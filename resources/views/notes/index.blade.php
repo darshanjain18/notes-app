@@ -10,17 +10,20 @@
     <p>{{ $note->description }}</p>
     <a href="{{ route('notes.edit', $note->id) }}">Edit</a>
 
-    <hr>
+    
     
     <form action="{{ route('notes.destroy', $note->id) }}" method="POST">
 
     @csrf
     @method('DELETE')
 
+    <br>
+
     <button type="submit">
         Delete
     </button>
-
+ 
+    <hr>
 </form>
 
 @endforeach
