@@ -7,10 +7,17 @@ use App\Models\Note;
 class NoteController extends Controller
 {
     //
+    public function index()
+    {
+        $notes = Note::all();
+        return view('notes.index',['notes' => $notes]);
+    }
+
     public function create()
     {
         return view('notes.create');
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -23,36 +30,38 @@ class NoteController extends Controller
         ]);
         return redirect()->route('notes.index');
     }
-    public function index()
+    
+    public function show(Note $note)
     {
-        $notes = Note::all();
-        return view('notes.index',['notes' => $notes]);
+        return view('notes.show',compact('note'));
     }
+
     public function edit(Note $note)
     {
-        return view('notes.edit',['note' => $note]);
+        return view('notes.edit',compact('note'));
     }
-    public function update(Request $request, $id)
+
+    public function update(Request $request, Note $note)
     {
      $request->validate([
         'title' => 'required',
         'description' => 'required',
      ]);
 
-    $note = Note::findorfail($id);
-
-    $note->update([
+     $note->update([
         'title' => $request->title,
         'description' => $request->description,
     ]);
 
     return redirect()->route('notes.index');
     }
-    public function destroy($id)
+
+    public function destroy(Note $note)
     {
-        $note = Note::findorfail($id);
         $note->delete();
         return redirect()->route('notes.index');  
      
     }
+
+     
 }
