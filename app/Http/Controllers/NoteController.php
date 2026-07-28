@@ -8,10 +8,18 @@ use App\Models\Note;
 class NoteController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $notes = Note::withTrashed()->latest()->get();
-        return view('notes.index',['notes' => $notes]);
+    $search = $request->search;
+
+    $notes = Note::withTrashed()->when($search, function ($query) use ($search) {
+    $query->where('title', 'like', "%{$search}%")
+          ->orWhere('description', 'like', "%{$search}%");
+})
+        ->latest()
+        ->get();
+
+    return view('notes.index', compact('notes'));
     }
 
     public function create()
