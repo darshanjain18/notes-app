@@ -2,62 +2,41 @@
 
 @section('content')
 
-<div class="container mt-4">
+<h1>Create a New Note</h1>
 
-    <div class="card shadow">
+<form action="{{ route('notes.store') }}" method="POST">
 
-        <div class="card-header">
-            <h2 class="mb-0">📝 Create a New Note</h2>
-        </div>
+    @csrf
 
-        <div class="card-body">
-
-            <form action="{{ route('notes.store') }}" method="POST">
-
-                @csrf
-
-                <div class="mb-3">
-                    <label class="form-label">Title</label>
-
-                    <input
-                        type="text"
-                        name="title"
-                        class="form-control"
-                        placeholder="Enter note title"
-                        value="{{ old('title') }}"
-                    >
-
-                    @error('title')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Description</label>
-
-                    <textarea
-                        name="description"
-                        class="form-control"
-                        rows="5"
-                        placeholder="Enter note description">{{ old('description') }}</textarea>
-
-                    @error('description')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
-
-                </div>
-
-                <button class="btn btn-success">
-                    💾 Save Note
-                </button>
-
-            </form>
-
-        </div>
-
+    <div class="mb-3">
+        <input
+            type="text"
+            name="title"
+            class="form-control"
+            placeholder="Enter note title"
+            value="{{ old('title') }}">
     </div>
 
-</div>
+    @error('title')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
+    <div class="mb-3">
+        <textarea
+            name="description"
+            class="form-control"
+            rows="5"
+            placeholder="Enter note description">{{ old('description') }}</textarea>
+    </div>
+
+    @error('description')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
+    <button type="submit" class="btn btn-success">
+        Save Note
+    </button>
+
+</form>
 
 @endsection
