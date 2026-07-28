@@ -9,4 +9,9 @@ class Note extends Model
 {
     use SoftDeletes;
     protected $fillable = ['title','description'];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

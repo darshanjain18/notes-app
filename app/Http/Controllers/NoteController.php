@@ -15,7 +15,7 @@ class NoteController extends Controller
     $notes = Note::withTrashed()->when($search, function ($query) use ($search) {
     $query->where('title', 'like', "%{$search}%")
           ->orWhere('description', 'like', "%{$search}%");
-})
+        })
         ->latest()
         ->paginate(3);
 

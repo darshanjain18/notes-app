@@ -3,16 +3,23 @@
 @section('content')
 <h1>All Notes</h1>
 
-<form action="{{ route('notes.index') }}" method="GET">
+<form action="{{ route('notes.index') }}" method="GET" class="mb-4">
 
-    <input
-        type="text"
-        name="search"
-        placeholder="Search notes..."
-        value="{{ request('search') }}"
-    >
+    <div class="input-group">
 
-    <button type="submit">Search</button>
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search notes..."
+            value="{{ request('search') }}"
+        >
+
+        <button class="btn btn-primary" type="submit">
+            🔍 Search
+        </button>
+
+    </div>
 
 </form>
 
@@ -20,51 +27,63 @@
 
 @forelse($notes as $note)
 
-    <h3>{{ $note->title }}</h3>
+<div class="card mb-3">
 
-    @if($note->deleted_at)
-        <p>🗑️ Deleted</p>
-    @endif
+    <div class="card-body">
 
-    <p>{{ $note->description }}</p>
+        <h3 class="card-title">{{ $note->title }}</h3>
 
-    <a href="{{ route('notes.show', $note) }}">View</a>
-    <a href="{{ route('notes.edit', $note) }}">Edit</a>
+        @if($note->deleted_at)
+            <span class="badge bg-danger">Deleted</span>
+        @endif
 
-    @if(!$note->deleted_at)
+        <p class="card-text mt-2">
+            {{ $note->description }}
+        </p>
 
-        <form action="{{ route('notes.destroy', $note) }}" method="POST">
-            @csrf
-            @method('DELETE')
+        <div class="d-flex gap-2 mt-3">
+            <a href="{{ route('notes.show', $note) }}" class="btn btn-primary btn-sm">
+                View
+            </a>
+            <a href="{{ route('notes.edit', $note) }}" class="btn btn-secondary btn-sm">
+                Edit
+            </a>
 
-            <button type="submit">
-                Delete
-            </button>
-        </form>
+            @if(!$note->deleted_at)
 
-    @else
+                <form action="{{ route('notes.destroy', $note) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
 
-        <form action="{{ route('notes.restore', $note) }}" method="POST">
-            @csrf
-            @method('PATCH')
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+                </form>
 
-            <button type="submit">
-                Restore
-            </button>
-        </form>
+            @else
 
-        <form action="{{ route('notes.forceDelete', $note) }}" method="POST">
-            @csrf
-            @method('DELETE')
+                <form action="{{ route('notes.restore', $note) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
 
-            <button type="submit">
-                💥 Delete Forever
-            </button>
-        </form>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        Restore
+                    </button>
+                </form>
 
-    @endif
+                <form action="{{ route('notes.forceDelete', $note) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
 
-    <hr>
+                    <button type="submit" class="btn btn-dark btn-sm">
+                        💥 Delete Forever
+                    </button>
+                </form>
+
+            @endif
+        </div>
+    </div>
+</div>
 
 @empty
 
