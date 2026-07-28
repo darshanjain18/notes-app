@@ -10,7 +10,7 @@ class NoteController extends Controller
     //
     public function index(Request $request)
     {
-    $search = $request->search;
+    $search = trim($request->search);
 
     $notes = Note::withTrashed()->when($search, function ($query) use ($search) {
     $query->where('title', 'like', "%{$search}%")
