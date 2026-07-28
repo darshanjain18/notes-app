@@ -29,7 +29,7 @@ class NoteController extends Controller
             'title' => $request->title,
             'description' => $request->description,
         ]);
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with('success', 'Note created successfully!');
     }
     
     public function show(Note $note)
@@ -54,28 +54,27 @@ class NoteController extends Controller
         'description' => $request->description,
     ]);
 
-    return redirect()->route('notes.index');
+    return redirect()->route('notes.index')->with('success', 'Note updated successfully!');
     }
 
     public function destroy(Note $note)
     {
         $note->delete();
-        return redirect()->route('notes.index');  
-     
+        return redirect()->route('notes.index')->with('success', 'Note deleted successfully!');
     }
 
     public function restore($id)
     {
         $note = Note::withTrashed()->findOrFail($id);
         $note->restore();
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with('success', 'Note restored successfully!');
     }
 
     public function forceDelete($id)
     {
         $note = Note::withTrashed()->findOrFail($id);
         $note->forceDelete();
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with('success', 'Note permanently deleted!');
 
     }
 
