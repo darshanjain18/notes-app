@@ -17,7 +17,7 @@ class NoteController extends Controller
           ->orWhere('description', 'like', "%{$search}%");
 })
         ->latest()
-        ->get();
+        ->paginate(3);
 
     return view('notes.index', compact('notes'));
     }

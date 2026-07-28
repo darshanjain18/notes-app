@@ -72,4 +72,6 @@
 
 @endforelse
 
+{{ $notes->links() }}
+
 @endsection
