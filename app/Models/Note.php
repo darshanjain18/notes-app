@@ -10,8 +10,13 @@ class Note extends Model
     use SoftDeletes;
     protected $fillable = ['title','description'];
 
-    public function getRouteKeyName()
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
+    
+    public function user()
     {
-        return 'slug';
+        return $this->belongsTo(User::class);
     }
 }
