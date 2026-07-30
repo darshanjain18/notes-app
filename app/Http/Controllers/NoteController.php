@@ -11,11 +11,21 @@ class NoteController extends Controller
     public function index(Request $request)
     {
     $search = trim($request->search);
+    $author = trim($request->author);
 
-    $notes = Note::withTrashed()->when($search, function ($query) use ($search) {
+    $notes = Note::withTrashed()->with(['user' => function ($query) {
+        $query->withCount('notes');
+        }])
+        
+    ->when($search, function ($query) use ($search) {
     $query->where('title', 'like', "%{$search}%")
           ->orWhere('description', 'like', "%{$search}%");
         })
+
+    ->when($author, function ($query) use ($author) {
+    $query->whereHas('user', function ($query) use ($author) {
+        $query->where('name', 'like', "%{$author}%");
+    });})
         ->latest()
         ->paginate(3);
 

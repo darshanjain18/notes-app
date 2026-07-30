@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Note extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['title','description'];
+    protected $fillable = ['title','description','user_id'];
 
     // public function getRouteKeyName()
     // {
