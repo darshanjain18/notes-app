@@ -14,7 +14,7 @@
     <div class="container">
 
         <a class="navbar-brand" href="{{ route('home') }}">
-            📝 Notes App
+            📒 Notes App
         </a>
 
         <div class="d-flex gap-3">

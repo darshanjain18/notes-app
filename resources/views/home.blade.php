@@ -1,9 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Welcome to Notes App</h1>
+<div class="text-center py-5">
 
-@if(request()->routeIs('home'))
-    <p>This is the home page of the Notes App. Here you can manage your notes efficiently.</p>
-@endif
+    <h1 class="display-3 fw-bold">
+        📝 Notes App
+    </h1>
+
+    <p class="lead text-muted mt-3">
+        A simple Laravel project to create, organize and manage notes.
+    </p>
+
+    <hr class="my-4">
+
+    <p class="text-secondary">
+        Built using Laravel, Eloquent ORM, Bootstrap, Soft Deletes,
+        Relationships, Search and Pagination.
+    </p>
+
+</div>
 @endsection
