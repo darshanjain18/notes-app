@@ -1,22 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>All Notes</h1>
+<h1 class="display-5 fw-bold text-center mb-4">
+    📝 Notes App
+</h1>
 
-<form action="{{ route('notes.index') }}" method="GET" class="mb-4">
+<p class="text-center text-muted mb-5">
+    Manage your notes efficiently with Laravel
+</p>
 
-    <div class="input-group">
+<form action="{{ route('notes.index') }}" method="GET" class="mb-5">
+
+    <div class="input-group input-group-lg">
 
         <input
             type="text"
             name="search"
             class="form-control"
-            placeholder="Search notes..."
+            placeholder="🔍 Search by title or description..."
             value="{{ request('search') }}"
         >
 
-        <button class="btn btn-primary" type="submit">
-            🔍 Search
+        <button class="btn btn-primary px-4" type="submit">
+            Search
         </button>
 
     </div>
@@ -27,25 +33,38 @@
 
 @forelse($notes as $note)
 
-<div class="card mb-3">
+<div class="card shadow-sm border-0 mb-4">
 
-    <div class="card-body">
+    <div class="card-body p-4">
 
-        <h3 class="card-title">{{ $note->title }}</h3>
+        <h3 class="card-title fw-bold">
+            📒 {{ $note->title }}
+        </h3>
 
+        <div class="mb-3">
+
+            <span class="badge bg-primary">
+                👤 {{ $note->user->name }}
+            </span>
+
+            <span class="badge bg-secondary">
+                📝 {{ $note->user->notes_count }} Notes
+            </span>
+
+        </div>
         @if($note->deleted_at)
             <span class="badge bg-danger">Deleted</span>
         @endif
 
-        <p class="card-text mt-2">
+        <p class="card-text text-muted fs-5">
             {{ $note->description }}
         </p>
 
-        <div class="d-flex gap-2 mt-3">
-            <a href="{{ route('notes.show', $note) }}" class="btn btn-primary btn-sm">
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="{{ route('notes.show', $note) }}" class="btn btn-outline-primary">
                 View
             </a>
-            <a href="{{ route('notes.edit', $note) }}" class="btn btn-secondary btn-sm">
+            <a href="{{ route('notes.edit', $note) }}" class="btn btn-outline-warning">
                 Edit
             </a>
 
@@ -55,7 +74,7 @@
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-danger btn-sm">
+                    <button type="submit" class="btn btn-outline-danger">
                         Delete
                     </button>
                 </form>
@@ -66,7 +85,7 @@
                     @csrf
                     @method('PATCH')
 
-                    <button type="submit" class="btn btn-success btn-sm">
+                    <button type="submit" class="btn btn-outline-success">
                         Restore
                     </button>
                 </form>
@@ -75,7 +94,7 @@
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-dark btn-sm">
+                    <button type="submit" class="btn btn-dark">
                         💥 Delete Forever
                     </button>
                 </form>
@@ -87,10 +106,20 @@
 
 @empty
 
-    <h3>No notes found.</h3>
+    <div class="alert alert-warning text-center">
+
+        <h4>⚠️ No Notes Found</h4>
+
+        <p class="mb-0">
+            Try searching with another keyword.
+        </p>
+
+    </div>
 
 @endforelse
 
-{{ $notes->links() }}
+<div class="d-flex justify-content-center mt-5">
+    {{ $notes->links() }}
+</div>
 
 @endsection
