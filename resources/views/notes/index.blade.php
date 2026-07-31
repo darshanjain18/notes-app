@@ -51,6 +51,11 @@
                 📝 {{ $note->user->notes_count }} Notes
             </span>
 
+            <p class="text-muted">
+                📅 Created:
+                {{ $note->created_at->format('d M Y, h:i A') }}
+            </p>
+
         </div>
         @if($note->deleted_at)
             <span class="badge bg-danger">Deleted</span>

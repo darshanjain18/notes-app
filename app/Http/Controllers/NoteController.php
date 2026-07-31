@@ -13,9 +13,19 @@ class NoteController extends Controller
     $search = trim($request->search);
     $author = trim($request->author);
 
-    $notes = Note::withTrashed()->with(['user' => function ($query) {
-        $query->withCount('notes');
-        }])
+    $notes = Note::select(
+        'id',
+        'title',
+        'description',
+        'user_id',
+        'created_at'
+    )
+    ->withTrashed()
+    ->with([
+        'user' => function ($query) {
+            $query->select('id', 'name')->withCount('notes');
+        }
+    ])
         
     ->when($search, function ($query) use ($search) {
     $query->where('title', 'like', "%{$search}%")
