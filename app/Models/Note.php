@@ -29,4 +29,12 @@ class Note extends Model
             get: fn ($value) => \Carbon\Carbon::parse($value)->format('d M Y, h:i A'),
     );
     }
+    // Mutators
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($title) => ucwords(strtolower($title))
+    );
+    }
 }

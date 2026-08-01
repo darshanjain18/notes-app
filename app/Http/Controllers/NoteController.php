@@ -56,6 +56,7 @@ class NoteController extends Controller
         Note::create([
             'title' => $request->title,
             'description' => $request->description,
+            'user_id' => 1
         ]);
         return redirect()->route('notes.index')->with('success', 'Note created successfully!');
     }
