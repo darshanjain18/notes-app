@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class Note extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['title','description','user_id'];
+    protected $fillable = ['title','description','user_id','slug'];
 
     // public function getRouteKeyName()
     // {
