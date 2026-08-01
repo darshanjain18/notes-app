@@ -1,130 +1,173 @@
 @extends('layouts.app')
 
 @section('content')
-<h1 class="display-5 fw-bold text-center mb-4">
-    📝 Notes App
-</h1>
 
-<p class="text-center text-muted mb-5">
-    Manage your notes efficiently with Laravel
-</p>
+<div class="container py-5">
 
-<form action="{{ route('notes.index') }}" method="GET" class="mb-5">
+    {{-- Hero Section --}}
+    <div class="text-center bg-light rounded-4 shadow-sm p-5 mb-5">
 
-    <div class="input-group input-group-lg">
+        <h1 class="display-4 fw-bold">
+            📝 Notes App
+        </h1>
 
-        <input
-            type="text"
-            name="search"
-            class="form-control"
-            placeholder="🔍 Search by title or description..."
-            value="{{ request('search') }}"
-        >
-
-        <button class="btn btn-primary px-4" type="submit">
-            Search
-        </button>
+        <p class="lead text-muted mb-4">
+            Organize your ideas, manage your notes and stay productive.
+        </p>
 
     </div>
 
-</form>
 
-<br>
+    {{-- Search --}}
+    <form action="{{ route('notes.index') }}" method="GET" class="mb-5">
 
-@forelse($notes as $note)
+        <div class="input-group input-group-lg">
 
-<div class="card shadow-sm border-0 mb-4">
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="🔍 Search by title or description..."
+                value="{{ request('search') }}">
 
-    <div class="card-body p-4">
+            <button class="btn btn-primary px-4">
+                Search
+            </button>
 
-        <h3 class="card-title fw-bold">
-            📒 {{ $note->title }}
-        </h3>
+        </div>
 
-        <div class="mb-3">
+    </form>
 
-            <span class="badge bg-primary">
-                👤 {{ $note->user->name }}
-            </span>
 
-            <span class="badge bg-secondary">
-                📝 {{ $note->user->notes_count }} Notes
-            </span>
+    {{-- Notes --}}
+    @forelse($notes as $note)
 
-            <p class="text-muted">
-                📅 Created:
-                {{ $note->created_at }}
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+            <div class="card-body p-4">
+
+                {{-- Title --}}
+                <h3 class="fw-bold mb-3">
+                    📝 {{ $note->title }}
+                </h3>
+
+                {{-- Metadata --}}
+                <div class="d-flex flex-wrap align-items-center gap-2 text-muted small mb-3">
+
+                    <span class="badge bg-primary">
+                        👤 {{ $note->user->name }}
+                    </span>
+
+                    <span class="badge bg-secondary">
+                        📄 {{ $note->user->notes_count }} Notes
+                    </span>
+
+                    <span>
+                        📅 {{ $note->created_at }}
+                    </span>
+
+                    @if($note->deleted_at)
+                        <span class="badge bg-danger">
+                            🗑 Deleted
+                        </span>
+                    @else
+                        <span class="badge bg-success">
+                            ✅ Active
+                        </span>
+                    @endif
+
+                </div>
+
+                {{-- Description --}}
+                <p class="text-secondary fs-5">
+                    {{ Str::words($note->description, 25, '...') }}
+                </p>
+
+                <hr>
+
+                {{-- Buttons --}}
+                <div class="d-flex flex-wrap gap-2">
+
+                    <a href="{{ route('notes.show', $note) }}"
+                       class="btn btn-outline-primary btn-sm">
+                        👁 View
+                    </a>
+
+                    @if(!$note->deleted_at)
+
+                        <a href="{{ route('notes.edit', $note) }}"
+                           class="btn btn-outline-warning btn-sm">
+                            ✏ Edit
+                        </a>
+
+                        <form action="{{ route('notes.destroy', $note) }}" method="POST">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="btn btn-outline-danger btn-sm">
+                                🗑 Delete
+                            </button>
+
+                        </form>
+
+                    @else
+
+                        <form action="{{ route('notes.restore', $note->id) }}" method="POST">
+
+                            @csrf
+                            @method('PATCH')
+
+                            <button class="btn btn-outline-success btn-sm">
+                                ♻ Restore
+                            </button>
+
+                        </form>
+
+                        <form action="{{ route('notes.forceDelete', $note->id) }}" method="POST">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="btn btn-danger btn-sm">
+                                💥 Delete Forever
+                            </button>
+
+                        </form>
+
+                    @endif
+
+                </div>
+
+            </div>
+
+        </div>
+
+    @empty
+
+        <div class="alert alert-warning text-center shadow-sm">
+
+            <h4>⚠️ No Notes Found</h4>
+
+            <p class="mb-0">
+                Try another search keyword or create a new note.
             </p>
 
-        </div>
-        @if($note->deleted_at)
-            <span class="badge bg-danger">Deleted</span>
-        @endif
-
-        <p class="card-text text-muted fs-5">
-            {{ $note->description }}
-        </p>
-
-        <div class="d-flex flex-wrap gap-2 mt-4">
-            <a href="{{ route('notes.show', $note) }}" class="btn btn-outline-primary">
-                View
-            </a>
-            <a href="{{ route('notes.edit', $note) }}" class="btn btn-outline-warning">
-                Edit
+            <a href="{{ route('notes.create') }}"
+               class="btn btn-primary mt-3">
+                ➕ Create First Note
             </a>
 
-            @if(!$note->deleted_at)
-
-                <form action="{{ route('notes.destroy', $note) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-
-                    <button type="submit" class="btn btn-outline-danger">
-                        Delete
-                    </button>
-                </form>
-
-            @else
-
-                <form action="{{ route('notes.restore', $note) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-
-                    <button type="submit" class="btn btn-outline-success">
-                        Restore
-                    </button>
-                </form>
-
-                <form action="{{ route('notes.forceDelete', $note) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-
-                    <button type="submit" class="btn btn-dark">
-                        💥 Delete Forever
-                    </button>
-                </form>
-
-            @endif
         </div>
-    </div>
-</div>
 
-@empty
+    @endforelse
 
-    <div class="alert alert-warning text-center">
 
-        <h4>⚠️ No Notes Found</h4>
-
-        <p class="mb-0">
-            Try searching with another keyword.
-        </p>
-
+    {{-- Pagination --}}
+    <div class="d-flex justify-content-center mt-5">
+        {{ $notes->links() }}
     </div>
 
-@endforelse
-
-<div class="d-flex justify-content-center mt-5">
-    {{ $notes->links() }}
 </div>
 
 @endsection

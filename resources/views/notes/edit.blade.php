@@ -1,34 +1,73 @@
 @extends('layouts.app')
 
 @section('content')
- <h1>Edit Note</h1>
- <form action="{{ route('notes.update', $note->id) }}" method="POST">
 
-    @csrf
-    @method('PUT')
+<div class="container mt-5">
 
-    <input
-        type="text"
-        name="title"
-        value="{{ $note->title }}"
-        placeholder="Enter note title">
-        <br>
-        <br>
-        <textarea
-        name="description"
-        placeholder="Enter note description" >{{ $note->description }}</textarea>
+    <div class="card shadow">
 
-    @error('title')
-    <p>{{ $message }}</p>
-    @enderror
+        <div class="card-header">
+            <h2 class="mb-0">✏ Edit Note</h2>
+        </div>
 
-    @error('description')
-    <p>{{ $message }}</p>
-    @enderror
+        <div class="card-body">
 
-    <button type="submit">
-        Update Note
-    </button>
+            <form action="{{ route('notes.update', $note) }}" method="POST">
 
-</form>
+                @csrf
+                @method('PUT')
+
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        class="form-control @error('title') is-invalid @enderror"
+                        value="{{ old('title', $note->title) }}"
+                        placeholder="Enter note title">
+
+                    @error('title')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+
+                    <textarea
+                        name="description"
+                        rows="5"
+                        class="form-control @error('description') is-invalid @enderror"
+                        placeholder="Enter note description">{{ old('description', $note->description) }}</textarea>
+
+                    @error('description')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <a href="{{ route('notes.index') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Update Note
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
 @endsection

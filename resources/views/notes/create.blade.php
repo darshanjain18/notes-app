@@ -2,41 +2,84 @@
 
 @section('content')
 
-<h1>Create a New Note</h1>
+<div class="container mt-5">
 
-<form action="{{ route('notes.store') }}" method="POST">
+    <div class="row justify-content-center">
 
-    @csrf
+        <div class="col-md-8">
 
-    <div class="mb-3">
-        <input
-            type="text"
-            name="title"
-            class="form-control"
-            placeholder="Enter note title"
-            value="{{ old('title') }}">
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">📝 Create New Note</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form action="{{ route('notes.store') }}" method="POST">
+
+                        @csrf
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Title
+                            </label>
+
+                            <input
+                                type="text"
+                                name="title"
+                                class="form-control @error('title') is-invalid @enderror"
+                                value="{{ old('title') }}"
+                                placeholder="Enter note title">
+
+                            @error('title')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                Description
+                            </label>
+
+                            <textarea
+                                name="description"
+                                rows="6"
+                                class="form-control @error('description') is-invalid @enderror"
+                                placeholder="Write your note here...">{{ old('description') }}</textarea>
+
+                            @error('description')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a href="{{ route('notes.index') }}"
+                               class="btn btn-outline-secondary">
+                                ← Cancel
+                            </a>
+
+                            <button class="btn btn-success">
+                                💾 Save Note
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    @error('title')
-        <p class="text-danger">{{ $message }}</p>
-    @enderror
-
-    <div class="mb-3">
-        <textarea
-            name="description"
-            class="form-control"
-            rows="5"
-            placeholder="Enter note description">{{ old('description') }}</textarea>
-    </div>
-
-    @error('description')
-        <p class="text-danger">{{ $message }}</p>
-    @enderror
-
-    <button type="submit" class="btn btn-success">
-        Save Note
-    </button>
-
-</form>
+</div>
 
 @endsection
