@@ -53,7 +53,7 @@
 
             <p class="text-muted">
                 📅 Created:
-                {{ $note->created_at->format('d M Y, h:i A') }}
+                {{ $note->created_at }}
             </p>
 
         </div>

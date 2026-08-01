@@ -13,13 +13,13 @@ class NoteController extends Controller
     $search = trim($request->search);
     $author = trim($request->author);
 
-    $notes = Note::select(
+    $notes = Note::select([
         'id',
         'title',
         'description',
         'user_id',
-        'created_at'
-    )
+        'created_at', 'deleted_at'
+    ])
     ->withTrashed()
     ->with([
         'user' => function ($query) {
@@ -62,6 +62,7 @@ class NoteController extends Controller
     
     public function show(Note $note)
     {
+        $note->loadMissing('user');
         return view('notes.show',compact('note'));
     }
 
@@ -91,14 +92,14 @@ class NoteController extends Controller
         return redirect()->route('notes.index')->with('success', 'Note deleted successfully!');
     }
 
-    public function restore($id)
+    public function restore(int $id)
     {
         $note = Note::withTrashed()->findOrFail($id);
         $note->restore();
         return redirect()->route('notes.index')->with('success', 'Note restored successfully!');
     }
 
-    public function forceDelete($id)
+    public function forceDelete(int $id)
     {
         $note = Note::withTrashed()->findOrFail($id);
         $note->forceDelete();
