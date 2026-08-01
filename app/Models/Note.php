@@ -37,4 +37,21 @@ class Note extends Model
             set: fn ($title) => ucwords(strtolower($title))
     );
     }
+
+    // Query Scopes
+
+   public function scopeSearch($query, $search)
+    {
+        return $query->where(function($query) use ($search){
+
+            $query->where('title','like',"%{$search}%")
+                ->orWhere('description','like',"%{$search}%");
+        });
+    }
+    public function scopeByAuthor($query, $author)
+    {
+        return $query->whereHas('user', function ($query) use ($author) {
+            $query->where('name', 'like', "%{$author}%");
+        });
+    }
 }

@@ -27,15 +27,15 @@ class NoteController extends Controller
         }
     ])
         
-    ->when($search, function ($query) use ($search) {
-    $query->where('title', 'like', "%{$search}%")
-          ->orWhere('description', 'like', "%{$search}%");
-        })
+    ->when($search, function($query) use ($search){
 
-    ->when($author, function ($query) use ($author) {
-    $query->whereHas('user', function ($query) use ($author) {
-        $query->where('name', 'like', "%{$author}%");
-    });})
+        $query->search($search);
+
+    })
+
+    ->when($author, function ($query) use ($author){
+        $query->byAuthor($author);
+    })
         ->latest()
         ->paginate(3);
 
