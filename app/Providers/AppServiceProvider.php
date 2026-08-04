@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 use App\Models\Note;
 use App\Observers\NoteObserver;
 
@@ -22,5 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Note::observe(NoteObserver::class);
+
+        Paginator::useBootstrapFive();
     }
 }
