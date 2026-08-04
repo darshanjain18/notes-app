@@ -13,7 +13,7 @@ class NoteController extends Controller
     $search = trim($request->search);
     $author = trim($request->author);
 
-    $notes = Note::select([
+    $notes = Note::where('user_id', auth()->id())->select([
         'id',
         'title',
         'description',
@@ -56,7 +56,7 @@ class NoteController extends Controller
         Note::create([
             'title' => $request->title,
             'description' => $request->description,
-            'user_id' => 1
+            'user_id' => auth()->id()
         ]);
         return redirect()->route('notes.index')->with('success', 'Note created successfully!');
     }
