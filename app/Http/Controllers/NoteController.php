@@ -63,17 +63,20 @@ class NoteController extends Controller
     
     public function show(Note $note)
     {
+        $this->authorize('view', $note);
         $note->loadMissing('user');
         return view('notes.show',compact('note'));
     }
 
     public function edit(Note $note)
     {
+        $this->authorize('update', $note);
         return view('notes.edit',compact('note'));
     }
 
     public function update(Request $request, Note $note)
     {
+     $this->authorize('update', $note);
      $request->validate([
         'title' => 'required',
         'description' => 'required',
@@ -89,6 +92,7 @@ class NoteController extends Controller
 
     public function destroy(Note $note)
     {
+        $this->authorize('delete', $note);
         $note->delete();
         return redirect()->route('notes.index')->with('success', 'Note deleted successfully!');
     }
@@ -96,6 +100,7 @@ class NoteController extends Controller
     public function restore(int $id)
     {
         $note = Note::withTrashed()->findOrFail($id);
+        $this->authorize('restore', $note);
         $note->restore();
         return redirect()->route('notes.index')->with('success', 'Note restored successfully!');
     }
@@ -103,6 +108,7 @@ class NoteController extends Controller
     public function forceDelete(int $id)
     {
         $note = Note::withTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', $note);
         $note->forceDelete();
         return redirect()->route('notes.index')->with('success', 'Note permanently deleted!');
 
