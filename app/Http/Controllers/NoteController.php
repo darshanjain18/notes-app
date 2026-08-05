@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Note;
+use Illuminate\Support\Facades\Storage;
 
 
 class NoteController extends Controller
@@ -52,10 +53,21 @@ class NoteController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
         ]);
+
+        $attachmentPath = null;
+            if ($request->hasFile('attachment')) {
+
+                $attachmentPath = $request
+                    ->file('attachment')
+                    ->store('notes', 'public');
+            }
+
         Note::create([
             'title' => $request->title,
             'description' => $request->description,
+            'attachment' => $attachmentPath,
             'user_id' => auth()->id()
         ]);
         return redirect()->route('notes.index')->with('success', 'Note created successfully!');
@@ -80,11 +92,36 @@ class NoteController extends Controller
      $request->validate([
         'title' => 'required',
         'description' => 'required',
+        'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+
      ]);
+
+    $attachmentPath = $note->attachment;
+
+    // Remove existing attachment
+    if ($request->remove_attachment && $note->attachment) {
+
+        Storage::disk('public')->delete($note->attachment);
+
+        $attachmentPath = null;
+    }
+
+    // Replace with new attachment
+    if ($request->hasFile('attachment')) {
+
+        if ($note->attachment) {
+            Storage::disk('public')->delete($note->attachment);
+        }
+
+        $attachmentPath = $request
+            ->file('attachment')
+            ->store('notes', 'public');
+    }
 
      $note->update([
         'title' => $request->title,
         'description' => $request->description,
+        'attachment' => $attachmentPath
     ]);
 
     return redirect()->route('notes.index')->with('success', 'Note updated successfully!');

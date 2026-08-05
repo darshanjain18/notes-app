@@ -23,6 +23,35 @@
             </div>
 
             <div class="mb-3">
+                <strong>Attachment:</strong>
+
+                @if($note->attachment)
+
+                    @php
+                        $extension = pathinfo($note->attachment, PATHINFO_EXTENSION);
+                    @endphp
+
+                    @if(in_array($extension, ['jpg', 'jpeg', 'png']))
+                        <div class="mt-2">
+                            <img src="{{ asset('storage/' . $note->attachment) }}"
+                                alt="Attachment"
+                                class="img-fluid rounded shadow"
+                                style="max-width:300px;">
+                        </div>
+                    @else
+                        <a href="{{ asset('storage/' . $note->attachment) }}"
+                        target="_blank"
+                        class="btn btn-outline-primary mt-2">
+                            📄 View Attachment
+                        </a>
+                    @endif
+
+                @else
+                    <p class="text-muted mb-0">No attachment uploaded.</p>
+                @endif
+            </div>
+
+            <div class="mb-3">
                 <strong>Author:</strong>
                 <p class="mb-0">{{ $note->user->name }}</p>
             </div>

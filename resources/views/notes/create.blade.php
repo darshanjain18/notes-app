@@ -16,7 +16,7 @@
 
                 <div class="card-body">
 
-                    <form action="{{ route('notes.store') }}" method="POST">
+                    <form action="{{ route('notes.store') }}" method="POST" enctype="multipart/form-data">
 
                         @csrf
 
@@ -55,6 +55,27 @@
                                     {{ $message }}
                                 </div>
                             @enderror
+                        </div>
+
+                        <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    Attachment
+                                </label>
+
+                                <input
+                                    type="file"
+                                    name="attachment"
+                                    class="form-control @error('attachment') is-invalid @enderror">
+
+                                <div class="form-text">
+                                    Allowed: JPG, PNG, PDF, DOCX (Max: 2 MB)
+                                </div>
+
+                                @error('attachment')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                         </div>
 
                         <div class="d-flex justify-content-between">

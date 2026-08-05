@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Note;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class NoteObserver
 {
@@ -45,6 +46,8 @@ class NoteObserver
      */
     public function forceDeleted(Note $note): void
     {
-        //
+        if ($note->attachment) {
+            Storage::disk('public')->delete($note->attachment);
+        }
     }
 }

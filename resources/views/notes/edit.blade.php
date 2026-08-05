@@ -12,7 +12,7 @@
 
         <div class="card-body">
 
-            <form action="{{ route('notes.update', $note) }}" method="POST">
+            <form action="{{ route('notes.update', $note) }}" method="POST" enctype="multipart/form-data">
 
                 @csrf
                 @method('PUT')
@@ -48,6 +48,82 @@
                             {{ $message }}
                         </div>
                     @enderror
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Current Attachment
+                    </label>
+
+                    @if($note->attachment)
+
+                        @php
+                            $extension = pathinfo($note->attachment, PATHINFO_EXTENSION);
+                        @endphp
+
+                        @if(in_array($extension, ['jpg', 'jpeg', 'png']))
+
+                            <div class="mb-3">
+                                <img src="{{ asset('storage/' . $note->attachment) }}"
+                                    class="img-fluid rounded shadow"
+                                    style="max-width:250px;">
+                            </div>
+
+                        @else
+
+                            <div class="mb-3">
+                                <a href="{{ asset('storage/' . $note->attachment) }}"
+                                target="_blank"
+                                class="btn btn-outline-primary">
+                                    📄 View Current File
+                                </a>
+                            </div>
+
+                        @endif
+
+                        <div class="form-check mb-3">
+
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="remove_attachment"
+                                value="1"
+                                id="removeAttachment">
+
+                            <label class="form-check-label" for="removeAttachment">
+                                Remove current attachment
+                            </label>
+
+                        </div>
+
+                    @else
+
+                        <p class="text-muted">
+                            No attachment uploaded.
+                        </p>
+
+                    @endif
+
+                    <label class="form-label fw-bold">
+                        Upload New Attachment
+                    </label>
+
+                    <input
+                        type="file"
+                        name="attachment"
+                        class="form-control @error('attachment') is-invalid @enderror">
+
+                    <div class="form-text">
+                        Leave empty to keep the current attachment.
+                    </div>
+
+                    @error('attachment')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                 </div>
 
                 <div class="d-flex gap-2">
